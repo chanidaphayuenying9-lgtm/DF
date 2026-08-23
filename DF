@@ -1,0 +1,75 @@
+-- ⭐ 5 FUNCTION ROBLOX SCRIPT
+-- ใส่ Script นี้ใน ServerScriptService
+
+local Players = game:GetService("Players")
+
+-- 1. สร้าง/จัดการเงิน
+local function setupMoney(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+
+	local money = Instance.new("IntValue")
+	money.Name = "Money"
+	money.Value = 100
+	money.Parent = leaderstats
+end
+
+-- 2. เพิ่มเงิน
+local function addMoney(player, amount)
+	local stats = player:FindFirstChild("leaderstats")
+	local money = stats and stats:FindFirstChild("Money")
+
+	if money then
+		money.Value += amount
+	end
+end
+
+-- 3. ตั้งค่าความเร็ว
+local function setSpeed(player, speed)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+	if humanoid then
+		humanoid.WalkSpeed = speed
+	end
+end
+
+-- 4. ตั้งค่าพลังชีวิต
+local function healPlayer(player)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+	if humanoid then
+		humanoid.Health = humanoid.MaxHealth
+	end
+end
+
+-- 5. รีเซ็ตตัวละคร
+local function resetCharacter(player)
+	if player.Character then
+		player:LoadCharacter()
+	end
+end
+
+
+-- เมื่อผู้เล่นเข้าเกม
+Players.PlayerAdded:Connect(function(player)
+
+	setupMoney(player)
+
+	player.CharacterAdded:Connect(function(character)
+		local humanoid = character:WaitForChild("Humanoid")
+
+		-- ความเร็วเริ่มต้น
+		humanoid.WalkSpeed = 16
+
+		-- ตัวอย่างเรียกใช้ฟังก์ชัน
+		task.wait(3)
+
+		setSpeed(player, 24)
+		addMoney(player, 50)
+		healPlayer(player)
+	end)
+
+end)
